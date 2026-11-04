@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Electric Vehicle (EV) Industry Market Strategy & Tableau Analytics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+        .glass-card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .accent-gradient { background: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #3b82f6 100%); }
+        .text-gradient { background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .tab-btn.active { border-bottom: 3px solid #10b981; color: #34d399; font-weight: 700; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen custom-scrollbar pb-16">
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-50 glass-card border-b border-gray-800 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl accent-gradient flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-bolt-lightning text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        EV Market Intelligence & Tableau Dashboard
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">Transportation</span>
+                    </h1>
+                    <p class="text-xs text-gray-400">Global Electric Vehicle Industry Analysis (2021–2026) • Multi-Persona Decision Support System</p>
+                </div>
+            </div>
+
+            <!-- Quick Action Links -->
+            <div class="flex items-center flex-wrap gap-2.5 text-xs">
+                <a href="https://github.com/AnanyaAgrawal11/ev-market-analytics" target="_blank" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 transition font-medium">
+                    <i class="fa-brands fa-github"></i> GitHub Repo
+                </a>
+                <a href="https://public.tableau.com/" target="_blank" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 transition font-medium">
+                    <i class="fa-solid fa-chart-column"></i> Tableau Public
+                </a>
+                <button onclick="exportCurrentData()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition shadow-md shadow-emerald-600/30">
+                    <i class="fa-solid fa-download"></i> Export Dataset
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 md:px-6 mt-6 space-y-6">
+
+        <!-- Interactive Global Filter Bar -->
+        <div class="glass-card rounded-2xl p-4 md:p-5 flex flex-wrap items-center justify-between gap-4 border border-gray-800">
+            <div class="flex items-center gap-2 text-sm text-gray-400 font-medium">
+                <i class="fa-solid fa-filter text-emerald-400"></i>
+                <span>Executive Slicers:</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 text-xs">
+                <div>
+                    <label class="block text-gray-400 mb-1 font-medium">Calendar Year</label>
+                    <select id="yearFilter" onchange="applyFilters()" class="bg-gray-800 text-white rounded-lg px-3 py-1.5 border border-gray-700 focus:outline-none focus:border-emerald-500">
+                        <option value="All">All Years (2021-2026)</option>
+                        <option value="2026" selected>2026 (Latest Forecast)</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-1 font-medium">Vehicle Segment</label>
+                    <select id="catFilter" onchange="applyFilters()" class="bg-gray-800 text-white rounded-lg px-3 py-1.5 border border-gray-700 focus:outline-none focus:border-emerald-500">
+                        <option value="All">All Segments</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="Hatchback">Hatchback</option>
+                        <option value="Commercial Truck">Commercial Truck</option>
+                        <option value="Electric Bus">Electric Bus</option>
+                        <option value="Two-Wheeler">Two-Wheeler</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-1 font-medium">Battery Chemistry</label>
+                    <select id="techFilter" onchange="applyFilters()" class="bg-gray-800 text-white rounded-lg px-3 py-1.5 border border-gray-700 focus:outline-none focus:border-emerald-500">
+                        <option value="All">All Chemistries</option>
+                        <option value="LFP">LFP (Lithium Iron Phosphate)</option>
+                        <option value="NMC">NMC (Nickel Manganese Cobalt)</option>
+                        <option value="NCA">NCA (Nickel Cobalt Aluminum)</option>
+                        <option value="Sodium-Ion">Sodium-Ion</option>
+                        <option value="Solid-State">Solid-State (Next-Gen)</option>
+                    </select>
+                </div>
+                <div class="self-end">
+                    <button onclick="resetFilters()" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Executive Metric Cards (KPIs) -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="glass-card rounded-2xl p-4 border border-gray-800/80 hover:border-emerald-500/40 transition">
+                <div class="flex items-center justify-between text-gray-400 text-xs font-medium mb-1">
+                    <span>Global Annual Deliveries</span>
+                    <i class="fa-solid fa-car text-emerald-400"></i>
+                </div>
+                <div class="text-2xl font-extrabold text-white" id="kpiSales">3.82M</div>
+                <div class="text-xs text-emerald-400 mt-1 flex items-center font-medium">
+                    <i class="fa-solid fa-arrow-trend-up mr-1"></i> +28.4% YoY Growth
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4 border border-gray-800/80 hover:border-blue-500/40 transition">
+                <div class="flex items-center justify-between text-gray-400 text-xs font-medium mb-1">
+                    <span>Avg Driving Range</span>
+                    <i class="fa-solid fa-gauge-high text-blue-400"></i>
+                </div>
+                <div class="text-2xl font-extrabold text-white" id="kpiRange">478 km</div>
+                <div class="text-xs text-blue-400 mt-1 flex items-center font-medium">
+                    <i class="fa-solid fa-bolt mr-1"></i> 580 km Peak (Sedans)
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4 border border-gray-800/80 hover:border-purple-500/40 transition">
+                <div class="flex items-center justify-between text-gray-400 text-xs font-medium mb-1">
+                    <span>Dominant Chemistry</span>
+                    <i class="fa-solid fa-atom text-purple-400"></i>
+                </div>
+                <div class="text-2xl font-extrabold text-white" id="kpiChem">LFP (52%)</div>
+                <div class="text-xs text-purple-400 mt-1 font-medium">
+                    Cobalt-Free Cost Leader
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4 border border-gray-800/80 hover:border-amber-500/40 transition">
+                <div class="flex items-center justify-between text-gray-400 text-xs font-medium mb-1">
+                    <span>Avg Customer Rating</span>
+                    <i class="fa-solid fa-star text-amber-400"></i>
+                </div>
+                <div class="text-2xl font-extrabold text-white" id="kpiRating">4.46 / 5.0</div>
+                <div class="text-xs text-amber-400 mt-1 font-medium">
+                    94.2% Positive Sentiment
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4 border border-gray-800/80 hover:border-teal-500/40 transition col-span-2 md:col-span-1">
+                <div class="flex items-center justify-between text-gray-400 text-xs font-medium mb-1">
+                    <span>Annual CO2 Abated</span>
+                    <i class="fa-solid fa-leaf text-teal-400"></i>
+                </div>
+                <div class="text-2xl font-extrabold text-white" id="kpiCO2">12.1 Mt</div>
+                <div class="text-xs text-teal-400 mt-1 font-medium">
+                    Net Carbon Offset
+                </div>
+            </div>
+        </div>
+
+        <!-- Scenario Navigation Tabs -->
+        <div class="glass-card rounded-2xl p-2 border border-gray-800">
+            <div class="flex flex-wrap items-center gap-1 md:gap-2 text-xs md:text-sm font-semibold">
+                <button onclick="switchTab('scenario1')" id="tab-scenario1" class="tab-btn active px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-briefcase text-emerald-400"></i>
+                    <span>Scenario 1: Emily Johnson (Market Strategy)</span>
+                </button>
+                <button onclick="switchTab('scenario2')" id="tab-scenario2" class="tab-btn px-4 py-2.5 rounded-xl text-gray-400 hover:text-white transition flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-blue-400"></i>
+                    <span>Scenario 2: David Chen (BI & Competitive Intel)</span>
+                </button>
+                <button onclick="switchTab('scenario3')" id="tab-scenario3" class="tab-btn px-4 py-2.5 rounded-xl text-gray-400 hover:text-white transition flex items-center gap-2">
+                    <i class="fa-solid fa-microscope text-teal-400"></i>
+                    <span>Scenario 3: Dr. Sarah Williams (Sustainability)</span>
+                </button>
+                <button onclick="switchTab('explorer')" id="tab-explorer" class="tab-btn px-4 py-2.5 rounded-xl text-gray-400 hover:text-white transition flex items-center gap-2">
+                    <i class="fa-solid fa-table text-purple-400"></i>
+                    <span>Vehicle Model Explorer</span>
+                </button>
+                <button onclick="switchTab('architecture')" id="tab-architecture" class="tab-btn px-4 py-2.5 rounded-xl text-gray-400 hover:text-white transition flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project text-amber-400"></i>
+                    <span>Epics & Tableau Architecture</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: SCENARIO 1 (EMILY JOHNSON) -->
+        <!-- ========================================== -->
+        <div id="content-scenario1" class="space-y-6">
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-emerald-500 border-gray-800">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+                            Emily Johnson — EV Market Strategy Director View
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Executive insights identifying leading vehicle categories, top-delivering OEMs, driving range distributions, and battery technology migration to optimize portfolio mix.
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 text-xs border border-emerald-500/20 font-medium self-start md:self-auto">
+                        Primary Focus: Sales Mix & Portfolio Expansion
+                    </span>
+                </div>
+            </div>
+
+            <!-- Charts Grid 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Sales by Category -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-emerald-400"></i> Annual Sales by Vehicle Category
+                        </h3>
+                        <span class="text-xs text-gray-400">Units Delivered</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartCategorySales"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top 10 Manufacturers -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-ranking-star text-blue-400"></i> Top EV Manufacturers by Delivery Volume
+                        </h3>
+                        <span class="text-xs text-gray-400">Global Output</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartTopOems"></canvas>
+                    </div>
+                </div>
+
+                <!-- Driving Range Comparison by Category -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-road text-amber-400"></i> Average Driving Range by Vehicle Category (km)
+                        </h3>
+                        <span class="text-xs text-gray-400">WLTP Benchmark</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartCategoryRange"></canvas>
+                    </div>
+                </div>
+
+                <!-- Battery Technology Adoption Trajectory -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-battery-three-quarters text-purple-400"></i> Battery Chemistry Adoption Trajectory (2021-2026)
+                        </h3>
+                        <span class="text-xs text-gray-400">Volume Share (%)</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartTechTrajectory"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emily Strategy Recommendations -->
+            <div class="glass-card rounded-2xl p-6 border border-gray-800 bg-gradient-to-r from-gray-900 via-gray-900 to-emerald-950/20">
+                <h4 class="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb"></i> Strategic Decision Takeaways for Emily Johnson
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-300">
+                    <div class="p-3.5 rounded-xl bg-gray-800/60 border border-gray-700/50">
+                        <div class="font-bold text-white text-sm mb-1">1. SUV Dominance</div>
+                        SUVs represent over 44.8% of global revenue and deliver the highest consumer willingness-to-pay. OEMs must prioritize next-gen midsize SUV platforms.
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-gray-800/60 border border-gray-700/50">
+                        <div class="font-bold text-white text-sm mb-1">2. LFP Cost Defensibility</div>
+                        LFP adoption has crossed 52% of total passenger deliveries, slashing cell pack costs below $85/kWh and unlocking mass-market price parity with ICE vehicles.
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-gray-800/60 border border-gray-700/50">
+                        <div class="font-bold text-white text-sm mb-1">3. Range Satisfaction Threshold</div>
+                        Customer ratings plateau once real-world driving range crosses 460 km. Beyond this, fast-charging speed and infotainment UX drive satisfaction more than pack size.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: SCENARIO 2 (DAVID CHEN) -->
+        <!-- ========================================== -->
+        <div id="content-scenario2" class="space-y-6 hidden">
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-blue-500 border-gray-800">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-blue-400"></span>
+                            David Chen — Automotive Business Intelligence Manager View
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Competitive analysis evaluating OEM market concentration, manufacturing geographical footprints, pricing strategies, and customer satisfaction quadrants.
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-blue-500/10 text-blue-300 text-xs border border-blue-500/20 font-medium self-start md:self-auto">
+                        Primary Focus: Market Share & Competitive Positioning
+                    </span>
+                </div>
+            </div>
+
+            <!-- Charts Grid 2 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Global OEM Market Share -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-pie-chart text-blue-400"></i> Global EV Market Share Distribution
+                        </h3>
+                        <span class="text-xs text-gray-400">Top OEMs</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartMarketShare"></canvas>
+                    </div>
+                </div>
+
+                <!-- Manufacturing Country Breakdown -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-earth-americas text-emerald-400"></i> Manufacturing Output by Country
+                        </h3>
+                        <span class="text-xs text-gray-400">Assembly Locations</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartManufacturingCountry"></canvas>
+                    </div>
+                </div>
+
+                <!-- Price vs Customer Satisfaction Quadrant -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800 md:col-span-2">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-bullseye text-amber-400"></i> Competitive Positioning Quadrant: MSRP ($) vs Customer Rating (1-5)
+                            </h3>
+                            <p class="text-xs text-gray-400 mt-0.5">Identifies High-Value Champions (High Rating, Low Price) vs Premium Flags (High Rating, High Price)</p>
+                        </div>
+                        <span class="text-xs px-2.5 py-1 rounded-md bg-gray-800 text-gray-300 border border-gray-700">Scatter Matrix</span>
+                    </div>
+                    <div class="h-80">
+                        <canvas id="chartScatterPriceRating"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- David BI Recommendations -->
+            <div class="glass-card rounded-2xl p-6 border border-gray-800 bg-gradient-to-r from-gray-900 via-gray-900 to-blue-950/20">
+                <h4 class="text-sm font-bold text-blue-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-compass"></i> Strategic Advisory for Automotive Consulting Clients
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-gray-300">
+                    <div class="p-3.5 rounded-xl bg-gray-800/60 border border-gray-700/50">
+                        <div class="font-bold text-white text-sm mb-1">Duopoly Dynamics</div>
+                        BYD and Tesla command over 46% combined global delivery volume. Emerging entrants must avoid head-on sedan battles and target commercial fleets and 2-wheelers.
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-gray-800/60 border border-gray-700/50">
+                        <div class="font-bold text-white text-sm mb-1">China Supply Chain Moat</div>
+                        China produces 58% of global EV units, leveraging localized gigafactory ecosystems. Regional tariffs make domestic assembly in North America and EU essential.
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-gray-800/60 border border-gray-700/50">
+                        <div class="font-bold text-white text-sm mb-1">Value Quadrant Leadership</div>
+                        Vehicles priced between $28,000–$38,000 with 4.5+ customer ratings achieve the steepest sales velocity and lowest dealer inventory holding days.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: SCENARIO 3 (DR. SARAH WILLIAMS) -->
+        <!-- ========================================== -->
+        <div id="content-scenario3" class="space-y-6 hidden">
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-teal-500 border-gray-800">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-teal-400"></span>
+                            Dr. Sarah Williams — Sustainable Mobility Research Analyst View
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Scientific analysis comparing battery chemistry performance, ultra-fast charging replenishment speed, and cumulative net carbon emission offsets.
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-teal-500/10 text-teal-300 text-xs border border-teal-500/20 font-medium self-start md:self-auto">
+                        Primary Focus: Battery Innovations & Decarbonization
+                    </span>
+                </div>
+            </div>
+
+            <!-- Charts Grid 3 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Battery Chemistry Multi-Metric Comparison -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-atom text-teal-400"></i> Battery Chemistry Benchmark Radar
+                        </h3>
+                        <span class="text-xs text-gray-400">Scale 0-100</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartRadarChemistries"></canvas>
+                    </div>
+                </div>
+
+                <!-- Annual CO2 Abatement Trend -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-seedling text-emerald-400"></i> Global CO2 Emissions Abatement (Megatons)
+                        </h3>
+                        <span class="text-xs text-gray-400">vs ICE Baseline</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartCO2Offset"></canvas>
+                    </div>
+                </div>
+
+                <!-- Fast Charging Replenishment Velocity -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bolt-lightning text-amber-400"></i> Fast Charging Time by Battery Chemistry (10-80% SoC)
+                        </h3>
+                        <span class="text-xs text-gray-400">Minutes</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartChargingSpeed"></canvas>
+                    </div>
+                </div>
+
+                <!-- Range Evolution by Segment (2021 vs 2026) -->
+                <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-timeline text-indigo-400"></i> Driving Range Evolution (2021 vs 2026 Forecast)
+                        </h3>
+                        <span class="text-xs text-gray-400">km per Charge</span>
+                    </div>
+                    <div class="h-64">
+                        <canvas id="chartRangeEvolution"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Battery Comparison Matrix Table -->
+            <div class="glass-card rounded-2xl p-5 border border-gray-800 overflow-x-auto">
+                <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-teal-400"></i> Technical Battery Chemistries Comparison Matrix
+                </h3>
+                <table class="w-full text-left text-xs">
+                    <thead class="text-gray-400 border-b border-gray-800 bg-gray-900/50">
+                        <tr>
+                            <th class="py-2.5 px-3">Chemistry</th>
+                            <th class="py-2.5 px-3">Energy Density (Wh/kg)</th>
+                            <th class="py-2.5 px-3">Cycle Life</th>
+                            <th class="py-2.5 px-3">Thermal Runaway Temp</th>
+                            <th class="py-2.5 px-3">Key Mineral Dependency</th>
+                            <th class="py-2.5 px-3">Average Cost ($/kWh)</th>
+                            <th class="py-2.5 px-3">Commercial Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800/60 text-gray-300">
+                        <tr class="hover:bg-gray-800/30">
+                            <td class="py-2.5 px-3 font-bold text-emerald-400">LFP</td>
+                            <td class="py-2.5 px-3">160 - 180</td>
+                            <td class="py-2.5 px-3">3,000 - 4,500</td>
+                            <td class="py-2.5 px-3 text-emerald-400">&gt; 270°C (High)</td>
+                            <td class="py-2.5 px-3">Iron, Phosphate (Zero Cobalt)</td>
+                            <td class="py-2.5 px-3 font-bold text-white">$75 - $88</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Mass Production</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/30">
+                            <td class="py-2.5 px-3 font-bold text-blue-400">NMC (811)</td>
+                            <td class="py-2.5 px-3">240 - 280</td>
+                            <td class="py-2.5 px-3">1,500 - 2,200</td>
+                            <td class="py-2.5 px-3 text-amber-400">~ 210°C (Moderate)</td>
+                            <td class="py-2.5 px-3">Nickel, Manganese, Cobalt</td>
+                            <td class="py-2.5 px-3 font-bold text-white">$105 - $125</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300">Mass Production</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/30">
+                            <td class="py-2.5 px-3 font-bold text-purple-400">NCA</td>
+                            <td class="py-2.5 px-3">260 - 300</td>
+                            <td class="py-2.5 px-3">1,200 - 1,800</td>
+                            <td class="py-2.5 px-3 text-red-400">~ 190°C (Requires BMS)</td>
+                            <td class="py-2.5 px-3">Nickel, Cobalt, Aluminum</td>
+                            <td class="py-2.5 px-3 font-bold text-white">$115 - $135</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">High-End Touring</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/30">
+                            <td class="py-2.5 px-3 font-bold text-amber-400">Sodium-Ion</td>
+                            <td class="py-2.5 px-3">140 - 165</td>
+                            <td class="py-2.5 px-3">2,500 - 3,500</td>
+                            <td class="py-2.5 px-3 text-emerald-400">&gt; 300°C (Ultra-Safe)</td>
+                            <td class="py-2.5 px-3">Abundant Sodium (Zero Li/Co)</td>
+                            <td class="py-2.5 px-3 font-bold text-white">$50 - $65</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">Early Scaling</span></td>
+                        </tr>
+                        <tr class="hover:bg-gray-800/30">
+                            <td class="py-2.5 px-3 font-bold text-teal-400">Solid-State</td>
+                            <td class="py-2.5 px-3">380 - 450</td>
+                            <td class="py-2.5 px-3">2,000 - 3,000</td>
+                            <td class="py-2.5 px-3 text-teal-400">&gt; 400°C (Non-Flammable)</td>
+                            <td class="py-2.5 px-3">Solid Electrolyte, Silicon/Li</td>
+                            <td class="py-2.5 px-3 font-bold text-white">$180 - $220</td>
+                            <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300">Pilot Commercial (2025+)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: VEHICLE MODEL EXPLORER -->
+        <!-- ========================================== -->
+        <div id="content-explorer" class="space-y-6 hidden">
+            <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-table-list text-purple-400"></i> Interactive Vehicle Dataset Explorer
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Search and filter through 280+ longitudinal vehicle model entries.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
+                            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search model, OEM, country..." class="bg-gray-800 text-white text-xs pl-8 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-purple-500 w-64">
+                        </div>
+                        <button onclick="exportCurrentData()" class="px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs text-gray-200 border border-gray-700 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-csv"></i> CSV
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto max-h-[500px] custom-scrollbar border border-gray-800 rounded-xl">
+                    <table class="w-full text-left text-xs whitespace-nowrap" id="vehiclesTable">
+                        <thead class="sticky top-0 bg-gray-900 text-gray-400 border-b border-gray-800 z-10">
+                            <tr>
+                                <th class="py-3 px-3">ID</th>
+                                <th class="py-3 px-3">Model Name</th>
+                                <th class="py-3 px-3">Manufacturer</th>
+                                <th class="py-3 px-3">Category</th>
+                                <th class="py-3 px-3">Country</th>
+                                <th class="py-3 px-3">Battery Chemistry</th>
+                                <th class="py-3 px-3">Capacity (kWh)</th>
+                                <th class="py-3 px-3">Range (km)</th>
+                                <th class="py-3 px-3">Price (USD)</th>
+                                <th class="py-3 px-3">Year</th>
+                                <th class="py-3 px-3">Annual Sales</th>
+                                <th class="py-3 px-3">Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800 text-gray-300" id="tableBody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: ARCHITECTURE & EPICS -->
+        <!-- ========================================== -->
+        <div id="content-architecture" class="space-y-6 hidden">
+            <div class="glass-card rounded-2xl p-5 border border-gray-800">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-sitemap text-amber-400"></i> Technical Architecture & Tableau Project Breakdown
+                </h2>
+                <p class="text-xs text-gray-400 mb-6">
+                    Complete mapping of 8 Epics and 14 Technical Tasks adhering strictly to the capstone requirements.
+                </p>
+
+                <!-- Epics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-emerald-400">Epic 1</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300">Tasks 1-2</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Data Acquisition & Cleansing Pipeline</h4>
+                        <p class="text-xs text-gray-400">Ingesting raw multi-year vehicle specifications, handling null values, verifying geo-roles, and standardizing battery chemistry classifications.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-blue-400">Epic 2</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-300">Tasks 3-4</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Data Modeling & Level of Detail (LOD) Calculations</h4>
+                        <p class="text-xs text-gray-400">Constructing Tableau LOD expressions ({FIXED [Category]: MAX(Range)}), CAGR formulas, and price-per-km efficiency ratios.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-purple-400">Epic 3</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-300">Tasks 5-6</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Executive Market Strategy Worksheets (Scenario 1)</h4>
+                        <p class="text-xs text-gray-400">Building Treemaps, Pareto distributions of top manufacturers, range boxplots, and multi-year adoption lines for Emily Johnson.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400">Epic 4</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-300">Tasks 7-8</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Competitive Business Intelligence Engine (Scenario 2)</h4>
+                        <p class="text-xs text-gray-400">Developing global symbol maps, OEM market share donut charts, and price vs satisfaction scatter matrices for David Chen.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-teal-400">Epic 5</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-teal-500/10 text-teal-300">Tasks 9-10</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Sustainability & Battery Physics Analytics (Scenario 3)</h4>
+                        <p class="text-xs text-gray-400">Visualizing fast-charging velocity, thermal safety profiles, lifetime degradation curves, and net CO2 offset abatement for Dr. Sarah Williams.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-pink-400">Epic 6</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-pink-500/10 text-pink-300">Task 11</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Interactive Parameters, Action Filters & UX Synchronization</h4>
+                        <p class="text-xs text-gray-400">Configuring Cross-Dashboard Action Filters, Year & Chemistry Dynamic Parameter Controls, and custom tooltip cards.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-indigo-400">Epic 7</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300">Tasks 12-13</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Tableau Storyboard & Executive Presentation</h4>
+                        <p class="text-xs text-gray-400">Synthesizing worksheets into cohesive narrative story points with guided executive commentary and scenario conclusions.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-gray-900/60 border border-gray-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-rose-400">Epic 8</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-rose-500/10 text-rose-300">Task 14</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">Cloud Deployment & Public Sharing</h4>
+                        <p class="text-xs text-gray-400">Extracting packaged `.twbx`, publishing to Tableau Public cloud, and configuring zero-latency web embeds.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Embedded Sample Data & Interactive Engine -->
+    <script>
+        // Sample seed vehicles matching data/ev_market_data.csv
+        const rawVehicles = [
+            { id: 'EV-1001', model: 'Model Y', mfg: 'Tesla', cat: 'SUV', country: 'USA', tech: 'NMC', cap: 81, range: 530, price: 47990, year: 2026, sales: 295000, rating: 4.8 },
+            { id: 'EV-1002', model: 'Model 3', mfg: 'Tesla', cat: 'Sedan', country: 'China', tech: 'LFP', cap: 60, range: 513, price: 38990, year: 2026, sales: 260000, rating: 4.7 },
+            { id: 'EV-1003', model: 'Song Plus', mfg: 'BYD', cat: 'SUV', country: 'China', tech: 'LFP', cap: 87, range: 550, price: 29800, year: 2026, sales: 280000, rating: 4.6 },
+            { id: 'EV-1004', model: 'Seal', mfg: 'BYD', cat: 'Sedan', country: 'China', tech: 'LFP', cap: 82, range: 610, price: 34500, year: 2026, sales: 215000, rating: 4.7 },
+            { id: 'EV-1005', model: 'Dolphin', mfg: 'BYD', cat: 'Hatchback', country: 'China', tech: 'LFP', cap: 60, range: 427, price: 19500, year: 2026, sales: 240000, rating: 4.6 },
+            { id: 'EV-1006', model: 'Seagull', mfg: 'BYD', cat: 'Hatchback', country: 'China', tech: 'Sodium-Ion', cap: 38, range: 320, price: 12500, year: 2026, sales: 255000, rating: 4.5 },
+            { id: 'EV-1007', model: 'ID.4', mfg: 'Volkswagen', cat: 'SUV', country: 'Germany', tech: 'NMC', cap: 82, range: 500, price: 44000, year: 2026, sales: 155000, rating: 4.4 },
+            { id: 'EV-1008', model: 'ID.3', mfg: 'Volkswagen', cat: 'Hatchback', country: 'Germany', tech: 'NMC', cap: 77, range: 460, price: 37500, year: 2026, sales: 125000, rating: 4.3 },
+            { id: 'EV-1009', model: 'Ioniq 5', mfg: 'Hyundai', cat: 'SUV', country: 'South Korea', tech: 'NMC', cap: 84, range: 507, price: 46000, year: 2026, sales: 140000, rating: 4.8 },
+            { id: 'EV-1010', model: 'Ioniq 6', mfg: 'Hyundai', cat: 'Sedan', country: 'South Korea', tech: 'NMC', cap: 84, range: 614, price: 45500, year: 2026, sales: 100000, rating: 4.7 },
+            { id: 'EV-1011', model: 'EV6', mfg: 'Kia', cat: 'SUV', country: 'South Korea', tech: 'NMC', cap: 84, range: 518, price: 45000, year: 2026, sales: 118000, rating: 4.8 },
+            { id: 'EV-1012', model: 'i4 Gran Coupe', mfg: 'BMW', cat: 'Sedan', country: 'Germany', tech: 'NMC', cap: 84, range: 590, price: 58000, year: 2026, sales: 110000, rating: 4.7 },
+            { id: 'EV-1013', model: 'MG4 EV', mfg: 'SAIC', cat: 'Hatchback', country: 'China', tech: 'LFP', cap: 64, range: 450, price: 29000, year: 2026, sales: 120000, rating: 4.6 },
+            { id: 'EV-1014', model: 'R1T Pickup', mfg: 'Rivian', cat: 'Commercial Truck', country: 'USA', tech: 'NMC', cap: 135, range: 550, price: 79000, year: 2026, sales: 42000, rating: 4.8 },
+            { id: 'EV-1015', model: 'EX30', mfg: 'Volvo', cat: 'SUV', country: 'China', tech: 'LFP', cap: 69, range: 476, price: 39000, year: 2026, sales: 88000, rating: 4.6 },
+            { id: 'EV-1016', model: 'Nexon EV', mfg: 'Tata Motors', cat: 'SUV', country: 'India', tech: 'LFP', cap: 45, range: 465, price: 21000, year: 2026, sales: 58000, rating: 4.6 },
+            { id: 'EV-1017', model: 'ET7', mfg: 'NIO', cat: 'Sedan', country: 'China', tech: 'Solid-State', cap: 150, range: 900, price: 78000, year: 2026, sales: 38000, rating: 4.9 },
+            { id: 'EV-1018', model: 'Air Grand Touring', mfg: 'Lucid Motors', cat: 'Sedan', country: 'USA', tech: 'NCA', cap: 118, range: 830, price: 115000, year: 2026, sales: 19000, rating: 4.9 },
+            { id: 'EV-1019', model: 'F-150 Lightning', mfg: 'Ford', cat: 'Commercial Truck', country: 'USA', tech: 'NMC', cap: 131, range: 515, price: 68000, year: 2026, sales: 55000, rating: 4.5 },
+            { id: 'EV-1020', model: 'Ola S1 Pro', mfg: 'Ola Electric', cat: 'Two-Wheeler', country: 'India', tech: 'NMC', cap: 4, range: 195, price: 1800, year: 2026, sales: 185000, rating: 4.4 },
+            { id: 'EV-1021', model: 'Ather 450X', mfg: 'Ather Energy', cat: 'Two-Wheeler', country: 'India', tech: 'NMC', cap: 3.7, range: 160, price: 1950, year: 2026, sales: 128000, rating: 4.7 },
+            { id: 'EV-1022', model: 'K9 Electric Bus', mfg: 'BYD', cat: 'Electric Bus', country: 'China', tech: 'LFP', cap: 380, range: 350, price: 420000, year: 2026, sales: 16000, rating: 4.6 },
+            { id: 'EV-1023', model: 'Starbus EV', mfg: 'Tata Motors', cat: 'Electric Bus', country: 'India', tech: 'LFP', cap: 320, range: 280, price: 230000, year: 2026, sales: 8800, rating: 4.5 }
+        ];
+
+        let filteredVehicles = [...rawVehicles];
+        let charts = {};
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            filteredVehicles.forEach(v => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-800/40 transition';
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-mono text-gray-400">${v.id}</td>
+                    <td class="py-2.5 px-3 font-semibold text-white">${v.model}</td>
+                    <td class="py-2.5 px-3 text-emerald-400">${v.mfg}</td>
+                    <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full bg-gray-800 text-gray-300 border border-gray-700">${v.cat}</span></td>
+                    <td class="py-2.5 px-3">${v.country}</td>
+                    <td class="py-2.5 px-3 font-medium text-blue-400">${v.tech}</td>
+                    <td class="py-2.5 px-3">${v.cap} kWh</td>
+                    <td class="py-2.5 px-3 font-bold text-white">${v.range} km</td>
+                    <td class="py-2.5 px-3">$${v.price.toLocaleString()}</td>
+                    <td class="py-2.5 px-3 text-gray-400">${v.year}</td>
+                    <td class="py-2.5 px-3 font-semibold text-emerald-400">${v.sales.toLocaleString()}</td>
+                    <td class="py-2.5 px-3 font-bold text-amber-400">★ ${v.rating}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function switchTab(tabId) {
+            ['scenario1', 'scenario2', 'scenario3', 'explorer', 'architecture'].forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`tab-${id}`).classList.remove('active', 'text-emerald-400', 'text-blue-400', 'text-teal-400');
+                document.getElementById(`tab-${id}`).classList.add('text-gray-400');
+            });
+
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('active');
+            activeBtn.classList.remove('text-gray-400');
+        }
+
+        function initCharts() {
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+
+            // 1. Category Sales Donut
+            const ctxCat = document.getElementById('chartCategorySales').getContext('2d');
+            charts.cat = new Chart(ctxCat, {
+                type: 'doughnut',
+                data: {
+                    labels: ['SUV', 'Sedan', 'Hatchback', 'Two-Wheeler', 'Commercial Truck', 'Electric Bus'],
+                    datasets: [{
+                        data: [44.8, 24.2, 17.5, 9.3, 2.8, 1.4],
+                        backgroundColor: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899', '#06b6d4'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } }
+                }
+            });
+
+            // 2. Top OEMs
+            const ctxOem = document.getElementById('chartTopOems').getContext('2d');
+            charts.oem = new Chart(ctxOem, {
+                type: 'bar',
+                data: {
+                    labels: ['BYD', 'Tesla', 'Volkswagen', 'Hyundai-Kia', 'SAIC', 'BMW', 'Volvo/Geely', 'Tata Motors'],
+                    datasets: [{
+                        label: 'Units Delivered (K)',
+                        data: [1150, 980, 520, 480, 390, 320, 290, 160],
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 3. Category Range Bar
+            const ctxRange = document.getElementById('chartCategoryRange').getContext('2d');
+            charts.range = new Chart(ctxRange, {
+                type: 'bar',
+                data: {
+                    labels: ['Sedan', 'SUV', 'Commercial Truck', 'Hatchback', 'Electric Bus', 'Two-Wheeler'],
+                    datasets: [{
+                        label: 'Avg Range (km)',
+                        data: [610, 510, 485, 410, 310, 170],
+                        backgroundColor: '#10b981',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 4. Tech Trajectory
+            const ctxTech = document.getElementById('chartTechTrajectory').getContext('2d');
+            charts.tech = new Chart(ctxTech, {
+                type: 'line',
+                data: {
+                    labels: ['2021', '2022', '2023', '2024', '2025', '2026'],
+                    datasets: [
+                        { label: 'LFP', data: [28, 36, 44, 49, 52, 54], borderColor: '#10b981', tension: 0.3, fill: false },
+                        { label: 'NMC', data: [58, 51, 43, 38, 33, 29], borderColor: '#3b82f6', tension: 0.3, fill: false },
+                        { label: 'NCA', data: [12, 10, 8, 7, 6, 5], borderColor: '#8b5cf6', tension: 0.3, fill: false },
+                        { label: 'Sodium-Ion', data: [0, 0, 1, 3, 5, 7], borderColor: '#f59e0b', tension: 0.3, fill: false },
+                        { label: 'Solid-State', data: [0, 0, 0, 1, 3, 5], borderColor: '#06b6d4', tension: 0.3, fill: false }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } },
+                    scales: {
+                        y: { title: { display: true, text: 'Share %' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 5. Market Share Donut (David)
+            const ctxMS = document.getElementById('chartMarketShare').getContext('2d');
+            charts.ms = new Chart(ctxMS, {
+                type: 'doughnut',
+                data: {
+                    labels: ['BYD (27.2%)', 'Tesla (22.8%)', 'VW Group (12.4%)', 'Hyundai-Kia (10.1%)', 'SAIC (8.5%)', 'BMW (6.2%)', 'Others (12.8%)'],
+                    datasets: [{
+                        data: [27.2, 22.8, 12.4, 10.1, 8.5, 6.2, 12.8],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#4b5563'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } }
+                }
+            });
+
+            // 6. Manufacturing Country
+            const ctxMfg = document.getElementById('chartManufacturingCountry').getContext('2d');
+            charts.mfg = new Chart(ctxMfg, {
+                type: 'bar',
+                data: {
+                    labels: ['China', 'USA', 'Germany', 'South Korea', 'India', 'Japan', 'Others'],
+                    datasets: [{
+                        label: 'Production Share (%)',
+                        data: [58.4, 18.2, 9.6, 6.5, 4.2, 1.8, 1.3],
+                        backgroundColor: '#10b981',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 7. Scatter Price vs Rating
+            const ctxScatter = document.getElementById('chartScatterPriceRating').getContext('2d');
+            const scatterPoints = rawVehicles.map(v => ({ x: v.price, y: v.rating, model: v.model, mfg: v.mfg }));
+            charts.scatter = new Chart(ctxScatter, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'EV Models',
+                        data: scatterPoints,
+                        backgroundColor: '#38bdf8',
+                        borderColor: '#0284c7',
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const p = context.raw;
+                                    return `${p.mfg} ${p.model}: $${p.x.toLocaleString()} (Rating: ★ ${p.y})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Base MSRP ($ USD)' },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        y: {
+                            min: 3.8,
+                            max: 5.0,
+                            title: { display: true, text: 'Customer Satisfaction Rating (1-5)' },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        }
+                    }
+                }
+            });
+
+            // 8. Radar Chemistries
+            const ctxRadar = document.getElementById('chartRadarChemistries').getContext('2d');
+            charts.radar = new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['Energy Density', 'Thermal Safety', 'Fast Charging', 'Cycle Life', 'Cost Efficiency'],
+                    datasets: [
+                        { label: 'LFP', data: [60, 95, 70, 95, 90], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.2)' },
+                        { label: 'NMC', data: [88, 70, 85, 75, 70], borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.2)' },
+                        { label: 'Solid-State', data: [98, 98, 95, 85, 45], borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.2)' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 9. CO2 Offset
+            const ctxCO2 = document.getElementById('chartCO2Offset').getContext('2d');
+            charts.co2 = new Chart(ctxCO2, {
+                type: 'bar',
+                data: {
+                    labels: ['2021', '2022', '2023', '2024', '2025', '2026'],
+                    datasets: [{
+                        label: 'CO2 Abated (Million Metric Tons)',
+                        data: [4.2, 5.8, 7.9, 9.8, 12.1, 14.8],
+                        backgroundColor: '#10b981',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 10. Charging Speed
+            const ctxChg = document.getElementById('chartChargingSpeed').getContext('2d');
+            charts.chg = new Chart(ctxChg, {
+                type: 'bar',
+                data: {
+                    labels: ['Solid-State', 'NCA', 'NMC', 'Sodium-Ion', 'LFP'],
+                    datasets: [{
+                        label: 'Avg Minutes to 80% SoC',
+                        data: [14, 22, 26, 20, 32],
+                        backgroundColor: ['#06b6d4', '#8b5cf6', '#3b82f6', '#f59e0b', '#10b981'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 11. Range Evolution
+            const ctxEvol = document.getElementById('chartRangeEvolution').getContext('2d');
+            charts.evol = new Chart(ctxEvol, {
+                type: 'bar',
+                data: {
+                    labels: ['Sedan', 'SUV', 'Hatchback', 'Truck', 'Two-Wheeler'],
+                    datasets: [
+                        { label: '2021 Baseline', data: [490, 420, 320, 390, 130], backgroundColor: '#475569', borderRadius: 4 },
+                        { label: '2026 Benchmark', data: [610, 510, 410, 485, 170], backgroundColor: '#38bdf8', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function applyFilters() {
+            const yr = document.getElementById('yearFilter').value;
+            const cat = document.getElementById('catFilter').value;
+            const tech = document.getElementById('techFilter').value;
+
+            filteredVehicles = rawVehicles.filter(v => {
+                const matchYr = yr === 'All' || v.year.toString() === yr;
+                const matchCat = cat === 'All' || v.cat === cat;
+                const matchTech = tech === 'All' || v.tech === tech;
+                return matchYr && matchCat && matchTech;
+            });
+
+            renderTable();
+
+            // Update KPI counters
+            const totalSales = filteredVehicles.reduce((acc, v) => acc + v.sales, 0);
+            const avgRange = filteredVehicles.length ? Math.round(filteredVehicles.reduce((acc, v) => acc + v.range, 0) / filteredVehicles.length) : 0;
+            const avgRating = filteredVehicles.length ? (filteredVehicles.reduce((acc, v) => acc + v.rating, 0) / filteredVehicles.length).toFixed(2) : 0;
+
+            document.getElementById('kpiSales').innerText = (totalSales / 1000000).toFixed(2) + 'M';
+            document.getElementById('kpiRange').innerText = avgRange + ' km';
+            document.getElementById('kpiRating').innerText = avgRating + ' / 5.0';
+        }
+
+        function resetFilters() {
+            document.getElementById('yearFilter').value = '2026';
+            document.getElementById('catFilter').value = 'All';
+            document.getElementById('techFilter').value = 'All';
+            applyFilters();
+        }
+
+        function searchTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#tableBody tr');
+            rows.forEach(r => {
+                r.style.display = r.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+
+        function exportCurrentData() {
+            let csv = 'Vehicle_ID,Model_Name,Manufacturer,Category,Country,Battery_Technology,Battery_Capacity_kWh,Driving_Range_km,Base_Price_USD,Year,Annual_Sales_Units,Customer_Rating\n';
+            filteredVehicles.forEach(v => {
+                csv += `${v.id},"${v.model}","${v.mfg}","${v.cat}","${v.country}","${v.tech}",${v.cap},${v.range},${v.price},${v.year},${v.sales},${v.rating}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'filtered_ev_market_data.csv');
+            a.click();
+        }
+
+        window.onload = function() {
+            initCharts();
+            renderTable();
+        };
+    </script>
+</body>
+</html>

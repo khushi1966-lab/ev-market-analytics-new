@@ -1,0 +1,14 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Tableau logs & temp
+*.log
+*.tmp
+*.hyper.temp
+
+# Editor files
+.vscode/
+.idea/
+*.swp
